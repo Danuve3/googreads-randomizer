@@ -1,0 +1,30 @@
+{
+    "name": "GoodReads Randomizer",
+    "short_name": "GR Random",
+    "description": "Elige tu próxima lectura al azar desde tu biblioteca de GoodReads",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0f0e17",
+    "theme_color": "#0f0e17",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "assets/icons/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        },
+        {
+            "src": "assets/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "assets/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

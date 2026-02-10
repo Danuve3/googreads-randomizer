@@ -1,0 +1,6 @@
+.env
+data/*.json
+csv/
+.DS_Store
+*.swp
+*.swo

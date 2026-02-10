@@ -1,0 +1,162 @@
+/* Base */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    overscroll-behavior: none;
+}
+
+/* Screens */
+.screen.active {
+    display: block;
+}
+
+.view.active {
+    display: block;
+}
+
+/* Filter controls */
+.filter-select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background-color: #232136;
+    border: 1px solid #2e2b45;
+    border-radius: 0.75rem;
+    color: #fffffe;
+    font-size: 0.8125rem;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a1b2' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #e94560;
+    box-shadow: 0 0 0 1px #e94560;
+}
+
+.filter-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    background-color: #232136;
+    border: 1px solid #2e2b45;
+    border-radius: 0.75rem;
+    color: #fffffe;
+    font-size: 0.8125rem;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    transition: border-color 0.2s;
+}
+
+.filter-input:focus {
+    outline: none;
+    border-color: #e94560;
+    box-shadow: 0 0 0 1px #e94560;
+}
+
+.filter-input::placeholder {
+    color: #94a1b2;
+}
+
+/* Nav buttons */
+.nav-btn {
+    color: #94a1b2;
+}
+
+.nav-btn.active {
+    color: #fffffe;
+    background-color: #1a1926;
+}
+
+.nav-btn:hover:not(.active) {
+    color: #fffffe;
+}
+
+/* Book card animations */
+.book-card {
+    animation: cardReveal 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes cardReveal {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Dice spin animation */
+@keyframes diceSpin {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(90deg) scale(1.2); }
+    50% { transform: rotate(180deg) scale(1); }
+    75% { transform: rotate(270deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+.dice-spinning {
+    animation: diceSpin 0.6s ease-in-out;
+}
+
+/* Genre tags */
+.genre-tag {
+    display: inline-block;
+    padding: 0.125rem 0.5rem;
+    background-color: #533483;
+    color: #fffffe;
+    font-size: 0.6875rem;
+    border-radius: 9999px;
+    font-weight: 500;
+    letter-spacing: 0.025em;
+}
+
+/* Pulse animation for loading */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.loading-pulse {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Progress bar shimmer */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.progress-shimmer {
+    background: linear-gradient(90deg, #e94560 25%, #7b5ea7 50%, #e94560 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2e2b45;
+    border-radius: 4px;
+}
+
+/* Cover image fallback */
+.cover-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #232136, #1a1926);
+}
