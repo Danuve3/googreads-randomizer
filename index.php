@@ -266,7 +266,7 @@
                         <input
                             type="file"
                             id="csv-file"
-                            accept=".csv"
+                            accept=".csv,text/csv,text/plain,application/csv,application/vnd.ms-excel"
                             class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                         >
                         <div class="border-2 border-dashed border-surface-2 rounded-xl p-6 text-center hover:border-accent/50 transition-colors">
