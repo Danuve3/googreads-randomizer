@@ -89,7 +89,9 @@
         <header class="sticky top-0 z-40 bg-bg/80 backdrop-blur-lg border-b border-surface-2">
             <div class="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
                 <h1 class="text-lg font-bold">
-                    <span class="text-accent">GR</span> Randomizer
+                    <a href="#" onclick="navigateTo('home'); return false;" class="hover:opacity-80 transition-opacity">
+                        <span class="text-accent">GR</span> Randomizer
+                    </a>
                 </h1>
                 <nav class="flex items-center gap-1">
                     <button data-nav="home" class="nav-btn active px-3 py-1.5 rounded-lg text-sm font-medium transition-colors">
@@ -144,11 +146,11 @@
                                 <option value="">Todos</option>
                             </select>
                         </div>
-                        <div>
+                        <div class="relative" id="author-filter-wrapper">
                             <label class="text-xs text-text-dim mb-1 block">Autor</label>
-                            <select id="filter-author" class="filter-select">
-                                <option value="">Todos</option>
-                            </select>
+                            <input type="text" id="filter-author" class="filter-input" placeholder="Todos" autocomplete="off">
+                            <input type="hidden" id="filter-author-value">
+                            <div id="author-dropdown" class="author-dropdown hidden"></div>
                         </div>
                         <div>
                             <label class="text-xs text-text-dim mb-1 block">Bookshelf</label>
@@ -192,11 +194,20 @@
                         <div class="flex p-4 gap-4">
                             <!-- Cover -->
                             <div class="flex-shrink-0">
-                                <div id="book-cover-container" class="w-28 h-40 bg-surface-2 rounded-lg overflow-hidden flex items-center justify-center">
+                                <div id="book-cover-container" class="w-28 h-40 bg-surface-2 rounded-lg overflow-hidden flex items-center justify-center relative">
                                     <img id="book-cover" class="w-full h-full object-cover hidden" alt="Portada">
-                                    <svg id="book-cover-placeholder" class="w-10 h-10 text-text-dim" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
-                                    </svg>
+                                    <div id="book-cover-spinner" class="absolute inset-0 flex items-center justify-center hidden">
+                                        <svg class="w-8 h-8 text-accent cover-spin" viewBox="0 0 24 24" fill="none">
+                                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" opacity="0.25"/>
+                                            <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                                        </svg>
+                                    </div>
+                                    <div id="book-cover-placeholder" class="flex flex-col items-center justify-center gap-1.5">
+                                        <svg class="w-8 h-8 text-text-dim" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                                        </svg>
+                                        <span class="text-text-dim text-[0.6rem] leading-tight text-center px-2">Portada no disponible</span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -310,6 +321,8 @@
             </div>
         </div>
     </div>
+
+    <p class="text-center text-[0.6rem] text-text-dim/30 py-4">Created by Danuve</p>
 
     <!-- Install PWA Banner -->
     <div id="pwa-install" class="hidden fixed bottom-4 left-4 right-4 max-w-lg mx-auto bg-surface border border-surface-2 rounded-2xl p-4 shadow-xl z-50">

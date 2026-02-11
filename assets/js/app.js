@@ -11,6 +11,7 @@ const App = {
         this.showScreen('app');
         this.setupNavigation();
         this.setupFilters();
+        Components.initAuthorSearch();
         this.setupRandomizer();
         this.setupImport();
         this.setupGenreFetch();

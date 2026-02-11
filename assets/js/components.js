@@ -1,6 +1,9 @@
 // UI Components
 const Components = {
 
+    _authors: [],
+    _authorSelected: '',
+
     // Populate filter select options
     populateFilters(data) {
         const populate = (id, items) => {
@@ -22,8 +25,20 @@ const Components = {
 
         populate('filter-shelf', data.shelves);
         populate('filter-genre', data.genres);
-        populate('filter-author', data.authors);
         populate('filter-bookshelf', data.bookshelves);
+
+        // Author searchable filter
+        this._authors = data.authors || [];
+        if (this._authorSelected && this._authors.includes(this._authorSelected)) {
+            document.getElementById('filter-author').value = this._authorSelected;
+        }
+
+        // Default shelf to "to-read" if no filter was previously selected
+        const shelfSelect = document.getElementById('filter-shelf');
+        if (!shelfSelect.value && data.shelves.includes('to-read')) {
+            shelfSelect.value = 'to-read';
+            this.updateClearButton();
+        }
     },
 
     // Render stats
@@ -38,7 +53,7 @@ const Components = {
         return {
             shelf: document.getElementById('filter-shelf').value,
             genre: document.getElementById('filter-genre').value,
-            author: document.getElementById('filter-author').value,
+            author: this._authorSelected,
             bookshelf: document.getElementById('filter-bookshelf').value,
             min_pages: document.getElementById('filter-min-pages').value,
             max_pages: document.getElementById('filter-max-pages').value,
@@ -53,13 +68,16 @@ const Components = {
 
     // Clear all filters
     clearFilters() {
-        document.getElementById('filter-shelf').value = '';
+        const shelfSelect = document.getElementById('filter-shelf');
+        const hasToRead = [...shelfSelect.options].some(o => o.value === 'to-read');
+        shelfSelect.value = hasToRead ? 'to-read' : '';
         document.getElementById('filter-genre').value = '';
         document.getElementById('filter-author').value = '';
+        this._authorSelected = '';
         document.getElementById('filter-bookshelf').value = '';
         document.getElementById('filter-min-pages').value = '';
         document.getElementById('filter-max-pages').value = '';
-        document.getElementById('clear-filters').classList.add('hidden');
+        this.updateClearButton();
     },
 
     // Show/hide clear filters button
@@ -90,21 +108,30 @@ const Components = {
         // Cover
         const coverImg = document.getElementById('book-cover');
         const coverPlaceholder = document.getElementById('book-cover-placeholder');
+        const coverSpinner = document.getElementById('book-cover-spinner');
         const coverContainer = document.getElementById('book-cover-container');
 
         coverContainer.classList.remove('cover-error');
+        coverImg.onload = null;
+        coverImg.onerror = null;
+        coverImg.classList.add('hidden');
 
         if (book.cover_url) {
-            coverImg.classList.remove('hidden');
             coverPlaceholder.classList.add('hidden');
-            coverImg.src = book.cover_url;
+            coverSpinner.classList.remove('hidden');
+            coverImg.onload = () => {
+                coverSpinner.classList.add('hidden');
+                coverImg.classList.remove('hidden');
+            };
             coverImg.onerror = () => {
+                coverSpinner.classList.add('hidden');
                 coverImg.classList.add('hidden');
                 coverPlaceholder.classList.remove('hidden');
                 coverContainer.classList.add('cover-error');
             };
+            coverImg.src = book.cover_url;
         } else {
-            coverImg.classList.add('hidden');
+            coverSpinner.classList.add('hidden');
             coverPlaceholder.classList.remove('hidden');
             coverContainer.classList.add('cover-error');
         }
@@ -144,6 +171,71 @@ const Components = {
             document.getElementById('fetch-genres-btn').textContent = `Obtener géneros (${progress.pending} pendientes)`;
             document.getElementById('fetch-genres-btn').disabled = false;
         }
+    },
+
+    // Initialize author search
+    initAuthorSearch() {
+        const input = document.getElementById('filter-author');
+        const dropdown = document.getElementById('author-dropdown');
+
+        const showDropdown = (query) => {
+            const q = query.toLowerCase();
+            const matches = q
+                ? this._authors.filter(a => a.toLowerCase().includes(q)).slice(0, 30)
+                : this._authors.slice(0, 30);
+
+            if (matches.length === 0) {
+                dropdown.classList.add('hidden');
+                return;
+            }
+
+            dropdown.innerHTML = '';
+            matches.forEach(author => {
+                const item = document.createElement('div');
+                item.className = 'author-dropdown-item';
+                if (q) {
+                    const idx = author.toLowerCase().indexOf(q);
+                    item.innerHTML =
+                        this._escapeHtml(author.substring(0, idx)) +
+                        '<mark>' + this._escapeHtml(author.substring(idx, idx + q.length)) + '</mark>' +
+                        this._escapeHtml(author.substring(idx + q.length));
+                } else {
+                    item.textContent = author;
+                }
+                item.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    input.value = author;
+                    this._authorSelected = author;
+                    dropdown.classList.add('hidden');
+                    this.updateClearButton();
+                });
+                dropdown.appendChild(item);
+            });
+            dropdown.classList.remove('hidden');
+        };
+
+        input.addEventListener('focus', () => {
+            showDropdown(input.value);
+        });
+
+        input.addEventListener('input', () => {
+            this._authorSelected = '';
+            showDropdown(input.value);
+            this.updateClearButton();
+        });
+
+        input.addEventListener('blur', () => {
+            dropdown.classList.add('hidden');
+            if (!this._authorSelected) {
+                input.value = '';
+            }
+        });
+    },
+
+    _escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
     },
 
     // Show empty state or randomizer
