@@ -24,6 +24,9 @@ jobs:
             **/.git*
             **/.git*/**
             .env
-            data/**
+            .env.example
+            README.md
+            data/*.json
+            data/.gitkeep
             csv/**
             .github/**
